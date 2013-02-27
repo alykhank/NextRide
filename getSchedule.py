@@ -12,9 +12,11 @@ def getRides(stop):
 
 def parseSchedule(response):
 	soup = BeautifulSoup(response.text)
+	if soup.find(id="ctl00_mainPanel_lblError"):
+		return { 'stopID': None, 'stopName': None, 'routes': None }
 	stopDesc = soup.find(id="ctl00_mainPanel_lblStopDescription")
 	stopID = stopDesc.string.split(', ',1)[0].replace('Stop ','')
-	stopName = stopDesc.string.split(', ',1)[1].replace(' at ','/')
+	stopName = stopDesc.string.split(', ',1)[1].replace(' at ',' / ')
 	buses = soup.find(id="ctl00_mainPanel_gvSearchResult").find_all('tr')
 	schedule = { 'stopID': stopID, 'stopName': stopName }
 	routes = []

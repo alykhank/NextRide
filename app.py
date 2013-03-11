@@ -12,13 +12,12 @@ def root():
 @app.route('/m')
 def mobileView():
 	stop = request.args.get('stop', 1, type=int)
-	payload = {'stop': stop}
-	r = requests.get('http://nextride.alykhan.com/api', params=payload)
-	if r.status_code == requests.codes.ok:
-		path = r.json()
+	schedule = getSchedule.parseSchedule(getSchedule.getRides(stop))
+	if schedule:
+		response = dict(meta=dict(status=200, message='OK'),data=schedule)
 	else:
 		abort(400)
-	return render_template('index.html', path=path)
+	return render_template('index.html', path=response)
 
 
 @app.route('/api')

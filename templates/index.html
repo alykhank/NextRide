@@ -29,6 +29,18 @@
 		</div><!-- header -->
 		<div data-role="content">
 			<p id="description">This is an open source application available on GitHub <a href="https://github.com/alykhank/NextRide">here</a>.</p>
+			<ul data-role="listview" data-inset="true" class="ui-icon-alt ui-icon-nodisc">
+				{% if path and path.data %}
+					<li data-role="list-divider">{{ path.data.stopID }}: {{ path.data.stopName }}</li>
+					{% if path.data.routes %}
+						{% for route in path.data.routes %}
+							<li>{{ route.route }} {{ route.direction }} &mdash; {{ route.time }}</li>
+						{% endfor %}
+					{% else %}
+						<li>No Service</li>
+					{% endif %}
+				{% endif %}
+			</ul>
 			<h2>Correct usage of this API:</h2>
 			<ul>
 				<li>

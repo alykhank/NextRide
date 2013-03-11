@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
+	<meta name="author" content="Alykhan Kanji">
 	<title>NextRide</title>
+	<meta name="application-name" content="NextRide">
+	<meta name="viewport" content="initial-scale=1.0,user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-title" content="NextRide">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" />
 	<style type="text/css">
-		body {
-			font-family: Helvetica, Arial, sans-serif;
+		#description {
+			text-align: center;
 		}
 	</style>
+	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
 	<!-- start Mixpanel --><script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===e.location.protocol?"https:":"http:")+'//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f);b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==
 	typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,
 	e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);
 	mixpanel.init("e0c01d55a08fa5711c962d514365f5a0");</script><!-- end Mixpanel -->
 </head>
 <body onload="mixpanel.track('Page View', {'Page Name': document.title, 'URL': window.location.href})">
-	<h1>NextRide</h1>
-	<p>This is an open source application available on GitHub <a href="https://github.com/alykhank/NextRide">here</a>.</p>
-	<h2>Correct usage of this API:</h2>
-	<ul>
-		<li>
-			Access the 'api' endpoint with a stop encoded as a query parameter: <a href="http://nextride.alykhan.com/api?stop=2000">http://nextride.alykhan.com/api?stop=2000</a>
-		</li>
-	</ul>
+	<div data-role="page" id="Home">
+		<div data-theme="b" data-role="header" data-position="fixed" data-disable-page-zoom="true" data-tap-toggle="false">
+			<h1>NextRide</h1>
+		</div><!-- header -->
+		<div data-role="content">
+			<p id="description">This is an open source application available on GitHub <a href="https://github.com/alykhank/NextRide">here</a>.</p>
+			<h2>Correct usage of this API:</h2>
+			<ul>
+				<li>
+					Access the 'api' endpoint with a stop encoded as a query parameter: <a href="http://nextride.alykhan.com/api?stop=2000">http://nextride.alykhan.com/api?stop=2000</a>
+				</li>
+			</ul>
+		</div><!-- content -->
+	</div>
 </body>
 </html>

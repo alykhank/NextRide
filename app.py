@@ -12,9 +12,10 @@ def root():
 @app.route('/m')
 def mobileView():
 	stop = request.args.get('stop', 1, type=int)
-	route = requests.get('http://nextride.alykhan.com/api?stop='+str(stop)).json()
-	if route:
-		path = route
+	payload = {'stop': stop}
+	r = requests.get('http://nextride.alykhan.com/api', params=payload)
+	if r.status_code == requests.codes.ok:
+		path = r.json()
 	else:
 		abort(400)
 	return render_template('index.html', path=path)

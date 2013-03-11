@@ -17,7 +17,7 @@ def mobileView():
 		response = dict(meta=dict(status=200, message='OK'),data=schedule)
 	else:
 		abort(400)
-	return render_template('index.html', path=response)
+	return render_template('m.html', path=response)
 
 
 @app.route('/api')

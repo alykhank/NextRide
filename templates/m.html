@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block index %}
+	<div data-role="page" id="Home">
+		<div data-theme="a" data-role="header" data-position="fixed" data-disable-page-zoom="true" data-tap-toggle="false">
+			<h1>NextRide</h1>
+		</div><!-- header -->
+		<div data-role="content">
+			<ul data-role="listview" data-inset="true" class="ui-icon-alt ui-icon-nodisc">
+				{% if path and path.data %}
+					<li data-role="list-divider">{{ path.data.stopID }}: {{ path.data.stopName }}</li>
+					{% if path.data.routes %}
+						{% for route in path.data.routes %}
+							<li>{{ route.route }} {{ route.direction }} &mdash; {{ route.time }}</li>
+						{% endfor %}
+					{% else %}
+						<li>No Service</li>
+					{% endif %}
+				{% endif %}
+			</ul>
+		</div><!-- content -->
+	</div>
+{% endblock index %}

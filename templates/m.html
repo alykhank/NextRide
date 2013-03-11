@@ -7,10 +7,10 @@
 		<div data-role="content">
 			<ul data-role="listview" data-inset="true" class="ui-icon-alt ui-icon-nodisc">
 				{% if path and path.data %}
-					<li data-role="list-divider">{{ path.data.stopID }}: {{ path.data.stopName }}</li>
+					<li data-role="list-divider" data-theme="a">{{ path.data.stopID }}: {{ path.data.stopName }}</li>
 					{% if path.data.routes %}
 						{% for route in path.data.routes %}
-							<li>{{ route.route }} {{ route.direction }} &mdash; {{ route.time }}</li>
+							<li>{{ route.route }} {{ route.direction }}<span class="ui-li-count">{{ route.time }}</span></li>
 						{% endfor %}
 					{% else %}
 						<li>No Service</li>

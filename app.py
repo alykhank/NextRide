@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, getSchedule
+import os, requests, getSchedule
 from flask import Flask, request, jsonify, render_template, abort
 
 app = Flask(__name__)
@@ -8,6 +8,17 @@ app = Flask(__name__)
 @app.route('/')
 def root():
 	return render_template('index.html')
+
+@app.route('/m')
+def mobileView():
+	stop = request.args.get('stop', 1, type=int)
+	route = requests.get('http://nextride.alykhan.com/api?stop='+str(stop)).json()
+	if route:
+		path = route
+	else:
+		abort(400)
+	return render_template('index.html', path=path)
+
 
 @app.route('/api')
 def api():

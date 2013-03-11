@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
 import os, getSchedule
-from flask import Flask, request, jsonify, send_file, url_for, redirect, abort
+from flask import Flask, request, jsonify, render_template, abort
 
 app = Flask(__name__)
 
 @app.route('/')
 def root():
-	return send_file('public/index.html')
+	return render_template('index.html')
 
 @app.route('/api')
 def api():

@@ -12,19 +12,26 @@ def getRides(stop):
 
 def parseSchedule(response):
 	soup = BeautifulSoup(response.text)
+	schedule = None
 	if soup.find(id="ctl00_mainPanel_lblError"):
-		return { 'stopID': None, 'stopName': None, 'routes': None }
-	stopDesc = soup.find(id="ctl00_mainPanel_lblStopDescription")
-	stopID = stopDesc.string.split(', ',1)[0].replace('Stop ','')
-	stopName = stopDesc.string.split(', ',1)[1].replace(' at ',' / ')
-	buses = soup.find(id="ctl00_mainPanel_gvSearchResult").find_all('tr')
-	schedule = { 'stopID': stopID, 'stopName': stopName }
-	routes = []
-	for bus in buses[1:]:
-		route = bus.td.string.split(' to ',1)
-		time = bus.td.next_sibling.string
-		routes.append({ 'route': route[0].replace('Route ',''), 'direction': route[1], 'time': time })
-	schedule.update({ 'routes' : routes })
+		schedule = None
+	else:
+		if soup.find(id="ctl00_mainPanel_lblStopDescription"):
+			stopDesc = soup.find(id="ctl00_mainPanel_lblStopDescription")
+			stopID = stopDesc.string.split(', ',1)[0].replace('Stop ','')
+			stopName = stopDesc.string.split(', ',1)[1].replace(' at ',' / ')
+		if soup.find(id="ctl00_mainPanel_gvSearchResult"):
+			buses = soup.find(id="ctl00_mainPanel_gvSearchResult").find_all('tr')
+			schedule = { 'stopID': stopID, 'stopName': stopName }
+			if buses[1].td.string == 'No Service':
+				schedule.update(routes=None)
+			else:
+				routes = []
+				for bus in buses[1:]:
+					route = bus.td.string.split(' to ',1)
+					time = bus.td.next_sibling.string
+					routes.append({ 'route': route[0].replace('Route ',''), 'direction': route[1], 'time': time })
+				schedule.update(routes=routes)
 	return schedule
 
 if __name__=="__main__":

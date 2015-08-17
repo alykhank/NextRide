@@ -7,9 +7,11 @@ import requests
 
 from viewstate import VIEWSTATE
 
+SCHEDULE_URL = "http://nextride.brampton.ca/mob/SearchBy.aspx"
+
 def rides(stop):
-    payload = { '__VIEWSTATE': VIEWSTATE, 'ctl00$mainPanel$searchbyStop$txtStop': stop, 'ctl00$mainPanel$btnGetRealtimeSchedule': 'GO' }
-    resp = requests.post('http://nextride.brampton.ca/mob/SearchBy.aspx', data=payload)
+    payload = {"__VIEWSTATE": VIEWSTATE, "ctl00$mainPanel$searchbyStop$txtStop": stop, "ctl00$mainPanel$btnGetRealtimeSchedule": "GO"}
+    resp = requests.post(SCHEDULE_URL, data=payload)
     return resp
 
 def parse(response):
@@ -19,19 +21,19 @@ def parse(response):
 
     if soup.find(id="ctl00_mainPanel_lblStopDescription"):
         stop_desc = soup.find(id="ctl00_mainPanel_lblStopDescription")
-        stop_id = stop_desc.string.split(', ',1)[0].replace('Stop ','')
-        stop_name = stop_desc.string.split(', ',1)[1].replace(' at ',' / ')
+        stop_id = stop_desc.string.split(", ", 1)[0].replace("Stop ", "")
+        stop_name = stop_desc.string.split(", ", 1)[1].replace(" at ", " / ")
     if soup.find(id="ctl00_mainPanel_gvSearchResult"):
-        buses = soup.find(id="ctl00_mainPanel_gvSearchResult").find_all('tr')
+        buses = soup.find(id="ctl00_mainPanel_gvSearchResult").find_all("tr")
         schedule = {"stopID": stop_id, "stopName": stop_name}
         if buses[1].td.string == "No Service":
             schedule.update(routes=None)
         else:
             routes = []
             for bus in buses[1:]:
-                route = bus.td.string.split(' to ',1)
+                route = bus.td.string.split(" to ", 1)
                 time = bus.td.next_sibling.string
-                routes.append({"route": route[0].replace('Route ',''), "direction": route[1], "time": time})
+                routes.append({"route": route[0].replace("Route ", ""), "direction": route[1], "time": time})
             schedule.update(routes=routes)
     return schedule
 

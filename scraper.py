@@ -8,9 +8,16 @@ import requests
 from viewstate import VIEWSTATE
 
 SCHEDULE_URL = "http://nextride.brampton.ca/mob/SearchBy.aspx"
+STOP_FIELD = "ctl00$mainPanel$searchbyStop$txtStop"
+REALTIME_FIELD = "ctl00$mainPanel$btnGetRealtimeSchedule"
+STOP_DESC_ELEMENT = "ctl00_mainPanel_lblStopDescription"
+SEARCH_RESULT_ELEMENT = "ctl00_mainPanel_gvSearchResult"
 
-def rides(stop):
-    payload = {"__VIEWSTATE": VIEWSTATE, "ctl00$mainPanel$searchbyStop$txtStop": stop, "ctl00$mainPanel$btnGetRealtimeSchedule": "GO"}
+def scrape(stop):
+    return parse(request(stop))
+
+def request(stop):
+    payload = {"__VIEWSTATE": VIEWSTATE, STOP_FIELD: stop, REALTIME_FIELD: "GO"}
     resp = requests.post(SCHEDULE_URL, data=payload)
     return resp
 
@@ -19,12 +26,12 @@ def parse(response):
     if soup.find(id="ctl00_mainPanel_lblError"):
         return None
 
-    if soup.find(id="ctl00_mainPanel_lblStopDescription"):
-        stop_desc = soup.find(id="ctl00_mainPanel_lblStopDescription")
+    if soup.find(id=STOP_DESC_ELEMENT):
+        stop_desc = soup.find(id=STOP_DESC_ELEMENT)
         stop_id = stop_desc.string.split(", ", 1)[0].replace("Stop ", "")
         stop_name = stop_desc.string.split(", ", 1)[1].replace(" at ", " / ")
-    if soup.find(id="ctl00_mainPanel_gvSearchResult"):
-        buses = soup.find(id="ctl00_mainPanel_gvSearchResult").find_all("tr")
+    if soup.find(id=SEARCH_RESULT_ELEMENT):
+        buses = soup.find(id=SEARCH_RESULT_ELEMENT).find_all("tr")
         schedule = {"stopID": stop_id, "stopName": stop_name}
         if buses[1].td.string == "No Service":
             schedule.update(routes=None)
@@ -37,7 +44,8 @@ def parse(response):
             schedule.update(routes=routes)
     return schedule
 
+
 if __name__ == "__main__":
-    stop_id = "2000"
-    schedule = parse(rides(stop_id))
+    stop = "2000"
+    schedule = scrape(stop)
     print json.dumps(schedule, indent=4)

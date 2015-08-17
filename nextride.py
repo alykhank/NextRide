@@ -5,7 +5,7 @@ import os
 import requests
 from flask import Flask, request, jsonify, render_template, abort
 
-import scraper
+from scraper import scrape
 
 app = Flask(__name__)
 
@@ -14,9 +14,9 @@ def root():
     return render_template("index.html")
 
 @app.route("/m")
-def mobileView():
+def mobile():
     stop = request.args.get("stop", 1, type=int)
-    schedule = scraper.parse(scraper.rides(stop))
+    schedule = scrape(stop)
     if schedule:
         response = dict(meta=dict(status=200, message="OK"), data=schedule)
     else:
@@ -27,7 +27,7 @@ def mobileView():
 @app.route("/api")
 def api():
     stop = request.args.get("stop", 1, type=int)
-    schedule = scraper.parse(scraper.rides(stop))
+    schedule = scrape(stop)
     if schedule:
         response = jsonify(meta=dict(status=200, message="OK"), data=schedule)
     else:

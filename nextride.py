@@ -9,28 +9,27 @@ import scraper
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/")
 def root():
-    return render_template('index.html')
+    return render_template("index.html")
 
-@app.route('/m')
+@app.route("/m")
 def mobileView():
-    stop = request.args.get('stop', 1, type=int)
+    stop = request.args.get("stop", 1, type=int)
     schedule = scraper.parse(scraper.rides(stop))
-    print(schedule)
     if schedule:
-        response = dict(meta=dict(status=200, message='OK'),data=schedule)
+        response = dict(meta=dict(status=200, message="OK"), data=schedule)
     else:
         abort(400)
-    return render_template('m.html', path=response)
+    return render_template("m.html", path=response)
 
 
-@app.route('/api')
+@app.route("/api")
 def api():
-    stop = request.args.get('stop', 1, type=int)
+    stop = request.args.get("stop", 1, type=int)
     schedule = scraper.parse(scraper.rides(stop))
     if schedule:
-        response = jsonify(meta=dict(status=200, message='OK'),data=schedule)
+        response = jsonify(meta=dict(status=200, message="OK"), data=schedule)
     else:
         abort(400)
     return response
@@ -42,5 +41,5 @@ def bad_request(error):
 
 if __name__ == "__main__":
     # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

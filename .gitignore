@@ -1,8 +1,5 @@
+# Python
 *.py[cod]
 
-#Exclude Virtualenv artifacts
-venv
-
-# Standard ignores
-*.DS_Store
-*.swp
+# Virtualenv
+venv/

@@ -8,8 +8,10 @@ import requests
 from viewstate import VIEWSTATE
 
 SCHEDULE_URL = "http://nextride.brampton.ca/mob/SearchBy.aspx"
+VIEWSTATE_FIELD = "__VIEWSTATE"
 STOP_FIELD = "ctl00$mainPanel$searchbyStop$txtStop"
 REALTIME_FIELD = "ctl00$mainPanel$btnGetRealtimeSchedule"
+REALTIME_VALUE = "GO"
 STOP_DESC_ELEMENT = "ctl00_mainPanel_lblStopDescription"
 SEARCH_RESULT_ELEMENT = "ctl00_mainPanel_gvSearchResult"
 
@@ -17,12 +19,16 @@ def scrape(stop):
     return parse(request(stop))
 
 def request(stop):
-    payload = {"__VIEWSTATE": VIEWSTATE, STOP_FIELD: stop, REALTIME_FIELD: "GO"}
+    payload = {
+        VIEWSTATE_FIELD: VIEWSTATE,
+        STOP_FIELD: stop,
+        REALTIME_FIELD: REALTIME_VALUE
+    }
     resp = requests.post(SCHEDULE_URL, data=payload)
     return resp
 
 def parse(response):
-    soup = BeautifulSoup(response.text)
+    soup = BeautifulSoup(response.text, "html.parser")
     if soup.find(id="ctl00_mainPanel_lblError"):
         return None
 

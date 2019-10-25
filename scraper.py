@@ -54,4 +54,4 @@ def parse(response):
 if __name__ == "__main__":
     stop = "2000"
     schedule = scrape(stop)
-    print json.dumps(schedule, indent=4)
+    print(json.dumps(schedule, indent=4))
